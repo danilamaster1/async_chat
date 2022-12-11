@@ -6,10 +6,15 @@ import socket
 import sys
 import json
 import time
+import logging
 sys.path.append('common')
+sys.path.append('log')
 from common.variables import ACTION, PRESENCE, TIME, USER, ACCOUNT_NAME, \
     RESPONSE, ERROR, DEFAULT_IP_ADDRESS, DEFAULT_PORT
 from common.utils import get_message, send_message
+import log.client_log_config
+
+logs = logging.getLogger('client')
 
 
 def create_presence(account_name='Guest'):
@@ -41,7 +46,7 @@ def main():
         server_address = DEFAULT_IP_ADDRESS
         server_port = DEFAULT_PORT
     except ValueError:
-        print('В качестве порта может быть указано только число в диапазоне от 1024 до 65535.')
+        logs.error('В качестве порта может быть указано только число в диапазоне от 1024 до 65535.')
         sys.exit(1)
 
     transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -52,7 +57,7 @@ def main():
         answer = process_ans(get_message(transport))
         print(answer)
     except (ValueError, json.JSONDecodeError):
-        print('Не удалось декодировать сообщение сервера.')
+        logs.error('Не удалось декодировать сообщение сервера.')
 
 
 if __name__ == '__main__':

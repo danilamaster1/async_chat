@@ -50,7 +50,13 @@ def main():
         sys.exit(1)
 
     transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    transport.connect((server_address, server_port))
+
+    try:
+        transport.connect((server_address, server_port))
+    except ConnectionRefusedError:
+        logs.error('Сервер не найден')
+        sys.exit(1)
+
     message_to_server = create_presence()
     send_message(transport, message_to_server)
     try:

@@ -54,7 +54,7 @@ def main():
     try:
         transport.connect((server_address, server_port))
     except ConnectionRefusedError:
-        logs.error('Сервер не найден')
+        logs.error('Сервер не найден.')
         sys.exit(1)
 
     message_to_server = create_presence()

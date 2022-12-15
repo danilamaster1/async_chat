@@ -5,7 +5,7 @@ import logging
 sys.path.append('common')
 sys.path.append('log')
 from common.variables import ACTION, ACCOUNT_NAME, RESPONSE, MAX_CONNECTIONS, \
-    PRESENCE, TIME, USER, ERROR, DEFAULT_PORT
+    PRESENCE, TIME, USER, ERROR, DEFAULT_PORT, DEFAULT_IP_ADDRESS
 from common.utils import get_message, send_message
 import log.server_log_config
 
@@ -27,8 +27,8 @@ def main():
         if '-p' in sys.argv:
             listen_port = int(sys.argv[sys.argv.index('-p') + 1])
         else:
-            listen_port = 778
-        if 65535 < listen_port < 1024:
+            listen_port = DEFAULT_PORT
+        if listen_port > 65535 or listen_port < 1024:
             raise ValueError
     except ValueError:
         logs.error('В качастве порта может быть указано только число в диапазоне от 1024 до 65535.')
@@ -37,7 +37,7 @@ def main():
         if '-a' in sys.argv:
             listen_address = sys.argv[sys.argv.index('-a') + 1]
         else:
-            listen_address = ''
+            listen_address = DEFAULT_IP_ADDRESS
     except IndexError:
         logs.error('После параметра \'a\'- необходимо указать адрес, который будет слушать сервер.')
         sys.exit(1)
@@ -46,8 +46,9 @@ def main():
 
     try:
         transport.bind((listen_address, listen_port))
-    except PermissionError:
-        logs.error('permission denied')
+    except socket.gaierror:
+        logs.error('Неправильный ip-address')
+        sys.exit(1)
 
     transport.listen(MAX_CONNECTIONS)
 

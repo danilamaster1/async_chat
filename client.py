@@ -40,7 +40,7 @@ def main():
     try:
         server_address = sys.argv[1]
         server_port = int(sys.argv[2])
-        if 65535 < server_port < 1024:
+        if server_port > 65535 or server_port < 1024:
             raise ValueError
     except IndexError:
         server_address = DEFAULT_IP_ADDRESS

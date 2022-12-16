@@ -2,16 +2,30 @@ import socket
 import json
 import sys
 import logging
+import inspect
 sys.path.append('common')
 sys.path.append('log')
 from common.variables import ACTION, ACCOUNT_NAME, RESPONSE, MAX_CONNECTIONS, \
     PRESENCE, TIME, USER, ERROR, DEFAULT_PORT, DEFAULT_IP_ADDRESS
 from common.utils import get_message, send_message
 import log.server_log_config
+from functools import wraps
+
 
 logs = logging.getLogger('server')
 
 
+def decor_log(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        outer_func = inspect.stack()[1][3]
+        logs.info(f'Функция {func.__name__} вызвана из функции {outer_func}')
+        r = func(*args, **kwargs)
+        return r
+    return wrapper
+
+
+@decor_log
 def process_client_message(message):
     if ACTION in message and message[ACTION] == PRESENCE and TIME in message \
             and USER in message and message[USER][ACCOUNT_NAME] == 'Guest':

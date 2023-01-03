@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.getcwd(), '..'))
 from common.variables import RESPONSE, USER, ACCOUNT_NAME, TIME, ACTION, PRESENCE
-from client import create_presence, process_ans
+from client import create_presence, process_response_ans
 
 
 class TestClass(unittest.TestCase):
@@ -13,7 +13,7 @@ class TestClass(unittest.TestCase):
         self.assertEqual(test, {ACTION: PRESENCE, TIME: 1.1, USER: {ACCOUNT_NAME: 'Guest'}})
 
     def test_correct_ans(self):
-        self.assertEqual(process_ans({RESPONSE: 200}), '200 : OK')
+        self.assertEqual(process_response_ans({RESPONSE: 200}), '200 : OK')
 
 
 if __name__ == '__main__':

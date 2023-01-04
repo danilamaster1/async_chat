@@ -5,6 +5,7 @@ import socket
 import argparse
 import logging
 import select
+sys.path.append('common')
 import logs.server_log_config
 from common.variables import DEFAULT_PORT, MAX_CONNECTIONS, ACTION, TIME, \
     USER, ACCOUNT_NAME, SENDER, PRESENCE, ERROR, MESSAGE, \

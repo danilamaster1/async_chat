@@ -6,7 +6,6 @@ import argparse
 import logging
 import threading
 sys.path.append('common')
-sys.path.append('logs')
 import logs.client_log_config
 from common.variables import DEFAULT_PORT, DEFAULT_IP_ADDRESS, ACTION, \
     TIME, USER, ACCOUNT_NAME, SENDER, PRESENCE, RESPONSE, \

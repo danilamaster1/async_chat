@@ -14,12 +14,14 @@ while True:
     elif ACTION == 's':
         PROCESSES.append(subprocess.Popen('python server.py',
                                           shell=True))
-        PROCESSES.append(subprocess.Popen('python client.py -n test1',
-                                          shell=True))
-        PROCESSES.append(subprocess.Popen('python client.py -n test2',
-                                          shell=True))
-        PROCESSES.append(subprocess.Popen('python client.py -n test3',
-                                          shell=True))
+        try:
+            count = int(input('Сколько клиентов запустить?: '))
+        except ValueError:
+            print('Не число, запуск 1 клиента')
+            PROCESSES.append(subprocess.Popen('python client.py -n test1', shell=True))
+        else:
+            for i in range(count):
+                PROCESSES.append(subprocess.Popen(f'python client.py -n test{i+1}', shell=True))
     elif ACTION == 'x':
         while PROCESSES:
             VICTIM = PROCESSES.pop()
